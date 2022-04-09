@@ -9,10 +9,11 @@ async function SetupDb() {
   console.log(allSurveys);
 }
 
+console.log("Creating fresh database with initial dummy data...");
 SetupDb()
   .then(() => {
-    console.log("Successfully Created Fresh Database");
+    console.log("Successfully created fresh database!");
   })
   .catch((err) => {
-    console.log(`Error: ${err}`);
+    console.log(`Error while setting up db: ${err}`);
   });
