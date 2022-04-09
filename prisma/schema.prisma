@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LOCAL_DATABASE_URL")
+}
+
+// _____> Schema
+
+model Respondant {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String
+
+  surveyResponse SurveyResponse[] // a respondant can have many surveyResponses
+}
+
+model Survey {
+  id           Int     @id @default(autoincrement())
+  surveyTitle  String  @unique
+  instructions String
+  otherInfo    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question       Question[] // A Survey can have many Questions
+  surveyResponse SurveyResponse[] // a survey can have many responses
+}
+
+model Question {
+  id       Int     @id @default(autoincrement())
+  surveyId Int
+  type     String // text, textarea, number, mcq, selectall, selectone
+  title    String
+  subtext  String?
+  required Boolean @default(false)
+
+  survey         Survey                 @relation(fields: [surveyId], references: [id]) // foreign key
+  questionChoice QuestionChoice[] // a question can have many question choices
+  surveAnswer    SurveyQuestionAnswer[] // a question can have many answers
+
+  @@index([surveyId])
+}
+
+model QuestionChoice {
+  id         Int    @id @default(autoincrement())
+  questionId Int
+  choiceText String
+
+  question Question @relation(fields: [questionId], references: [id]) // a questionChoice can only have one question
+
+  @@unique([questionId, choiceText])
+  @@index([questionId])
+}
+
+model SurveyResponse {
+  id           Int @id @default(autoincrement())
+  surveyId     Int
+  respondantId Int
+
+
+  respondant   Respondant             @relation(fields: [respondantId], references: [id]) // a surveyResponse can only be from one respondant
+  survey       Survey                 @relation(fields: [surveyId], references: [id]) // a surveyResponse can only of one Survey
+  surveyAnswer SurveyQuestionAnswer[] // a SurveyResponse can have many surveyAnswers
+
+  @@unique([surveyId, respondantId])
+  @@index([surveyId, respondantId])
+}
+
+model SurveyQuestionAnswer {
+  id               Int    @id @default(autoincrement())
+  surveyResponseId Int
+  questionId       Int
+  answerText       String
+  answerNumeric    Int
+
+  surveyResponse SurveyResponse @relation(fields: [surveyResponseId], references: [id])
+  question       Question       @relation(fields: [questionId], references: [id])
+
+  @@index([surveyResponseId])
+}

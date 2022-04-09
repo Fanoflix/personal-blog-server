@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import app from "./app.js";
-import dbPool from "./database/db.js";
 
 dotenv.config();
 
