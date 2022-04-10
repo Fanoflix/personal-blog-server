@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "reset-db": "node prisma/scripts/_reset.js",
-    "setup-db": "node prisma/scripts/_setup.js",
+    "reset-db": "node --experimental-json-modules prisma/scripts/_reset.js",
+    "seed-db": "node --experimental-json-modules prisma/scripts/_seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

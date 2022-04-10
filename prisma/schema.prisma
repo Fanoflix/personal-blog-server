@@ -7,38 +7,38 @@ datasource db {
   url      = env("LOCAL_DATABASE_URL")
 }
 
-
 // ____> Schema
 
 model Respondant {
-  id             Int              @id @default(autoincrement())
-  email          String           @unique
-  name           String
-  surveyResponse SurveyResponse[]
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  name            String
+  surveyResponses SurveyResponse[]
 }
 
 model Survey {
-  id             Int              @id @default(autoincrement())
-  surveyTitle    String           @unique
-  instructions   String
-  otherInfo      String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  question       Question[]
-  surveyResponse SurveyResponse[]
+  id              Int              @id @default(autoincrement())
+  surveyTitle     String           @unique
+  instructions    String
+  otherInfo       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  questions       Question[]
+  surveyResponses SurveyResponse[]
 }
 
 model Question {
-  id             Int                    @id @default(autoincrement())
-  surveyId       Int
-  type           String
-  title          String
-  subtext        String?
-  required       Boolean                @default(false)
-  survey         Survey                 @relation(fields: [surveyId], references: [id])
-  questionChoice QuestionChoice[]
-  surveAnswer    SurveyQuestionAnswer[]
+  id              Int                    @id @default(autoincrement())
+  surveyId        Int
+  title           String
+  subtext         String?
+  type            String
+  required        Boolean                @default(false)
+  survey          Survey                 @relation(fields: [surveyId], references: [id])
+  questionChoices QuestionChoice[]
+  surveyAnswers   SurveyQuestionAnswer[]
 
+  @@unique([surveyId, title])
   @@index([surveyId])
 }
 
@@ -53,12 +53,12 @@ model QuestionChoice {
 }
 
 model SurveyResponse {
-  id           Int                    @id @default(autoincrement())
-  surveyId     Int
-  respondantId Int
-  respondant   Respondant             @relation(fields: [respondantId], references: [id])
-  survey       Survey                 @relation(fields: [surveyId], references: [id])
-  surveyAnswer SurveyQuestionAnswer[]
+  id            Int                    @id @default(autoincrement())
+  surveyId      Int
+  respondantId  Int
+  respondant    Respondant             @relation(fields: [respondantId], references: [id])
+  survey        Survey                 @relation(fields: [surveyId], references: [id])
+  surveyAnswers SurveyQuestionAnswer[]
 
   @@unique([surveyId, respondantId])
   @@index([surveyId, respondantId])
@@ -68,8 +68,9 @@ model SurveyQuestionAnswer {
   id               Int            @id @default(autoincrement())
   surveyResponseId Int
   questionId       Int
-  answerText       String
-  answerNumeric    Int
+  answerText       String?
+  answerChoiceText String?
+  answerNumeric    Int?
   question         Question       @relation(fields: [questionId], references: [id])
   surveyResponse   SurveyResponse @relation(fields: [surveyResponseId], references: [id])
 
