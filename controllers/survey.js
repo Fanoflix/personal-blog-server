@@ -16,8 +16,6 @@ export const create = async (req, res, next) => {
       },
     });
 
-    if (!survey) throw new ApiError(httpCodes.badRequest, "Query wrong");
-
     // Todo: Create many questions sent from the client (not doing it now)
     // const questions = await prisma.question.createMany()
 
