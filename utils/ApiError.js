@@ -3,6 +3,8 @@ class ApiError extends Error {
     super(errorMessage);
     this.statusCode = statusCode;
     this.errorMessage = errorMessage;
+    this.isOperational = isOperational;
+    
     if (stack) {
       this.stack = stack;
     } else {

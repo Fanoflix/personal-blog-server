@@ -5,6 +5,9 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import ApiError from "./utils/ApiError.js";
 
+// Routes
+import surveyRoutes from "./routes/survey.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -71,9 +74,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 // send back a 404 error for any unknown api request
-app.use((req, res, next) => {
-  next(new ApiError(404, "Not found"));
-});
 
 /*
 .
@@ -82,5 +82,12 @@ app.use((req, res, next) => {
 .
 .
 */
+
+app.use("/survey", surveyRoutes);
+
+// unknown route
+app.use((req, res, next) => {
+  next(new ApiError(404, "Not found"));
+});
 
 export default app;
