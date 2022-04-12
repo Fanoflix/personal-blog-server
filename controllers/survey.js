@@ -27,7 +27,7 @@ export const create = async (req, res, next) => {
       meesage: `Survey ${generalMessages.created}`,
     });
   } catch (err) {
-    res.send(errorHandler(err));
+    res.send(errorHandler(err, "Survey"));
   }
 };
 
