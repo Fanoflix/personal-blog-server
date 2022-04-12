@@ -1,6 +1,9 @@
 import httpCodes from "../config/httpCodes.js";
+import generalMessages from "../config/generalMessages.js";
 import ApiError from "../utils/ApiError.js";
+import errorHandler from "../utils/errorHandler.js";
 import PrismaPackage from "@prisma/client";
+
 const { PrismaClient } = PrismaPackage;
 const prisma = new PrismaClient();
 
@@ -21,10 +24,10 @@ export const create = async (req, res, next) => {
 
     res.status(httpCodes.created).json({
       survey,
-      meesage: "Survey created successfully",
+      meesage: `Survey ${generalMessages.created}`,
     });
   } catch (err) {
-    next(err);
+    res.send(errorHandler(err));
   }
 };
 
@@ -45,13 +48,17 @@ export const get = async (req, res, next) => {
       },
     });
 
-    if (!survey) throw new ApiError(httpCodes.notFound, "Survey not found");
+    if (!survey)
+      throw new ApiError(
+        httpCodes.notFound,
+        `Survey ${generalMessages.notFound}`
+      );
 
     res.status(httpCodes.ok).json({
-      message: "Survey retrieved succcessfully.",
       survey,
+      message: `Survey ${generalMessages.retrieved}`,
     });
   } catch (err) {
-    next(err);
+    res.send(errorHandler(err));
   }
 };
