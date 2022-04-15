@@ -1,9 +1,9 @@
-class ApiError extends Error {
+class DatabaseError extends Error {
   constructor(statusCode, errorMessage, isOperational = true, stack = "") {
     super(errorMessage); // calls parent constructor
     this.statusCode = statusCode;
     this.errorMessage = errorMessage;
-    this.isOperational = isOperational; // operational errors are errors that are natual and expected to appear in the application
+    this.isOperational = isOperational;
 
     if (stack) {
       this.stack = stack;
@@ -13,4 +13,4 @@ class ApiError extends Error {
   }
 }
 
-export default ApiError;
+export default DatabaseError;
