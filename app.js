@@ -7,6 +7,7 @@ import ApiError from "./utils/ApiError.js";
 
 // Routes
 import surveyRoutes from "./routes/survey.js";
+import responseRoutes from "./routes/response.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -84,6 +85,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 */
 
 app.use("/survey", surveyRoutes);
+app.use("/response", responseRoutes);
 
 // unknown route
 app.use((req, res, next) => {
